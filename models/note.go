@@ -1,6 +1,10 @@
 package models
 
+import "time"
+
 type Note struct {
-	Title       string `json:"title"`
-	Description string `json:"description"`
+	ID          int       `json:"id"`
+	Title       string    `json:"title"`
+	Description string    `json:"description"`
+	CreatedAt   time.Time `json:"created_at"`
 }

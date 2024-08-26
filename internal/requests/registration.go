@@ -3,6 +3,7 @@ package requests
 import (
 	"Zametki/database"
 	"Zametki/models"
+	customerrors "Zametki/utils/custom-errors"
 	"Zametki/utils/jwts"
 	"encoding/json"
 	"net/http"
@@ -12,7 +13,7 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 	token := r.Header.Get("Authorization")
 	err := jwts.ParseToken(token)
 	if err == nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		http.Error(w, customerrors.ErrAlreadyAuthorized.Error(), http.StatusBadRequest)
 		return
 	}
 

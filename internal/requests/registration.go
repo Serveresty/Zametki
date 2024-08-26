@@ -11,7 +11,7 @@ import (
 
 func Registration(w http.ResponseWriter, r *http.Request) {
 	token := r.Header.Get("Authorization")
-	err := jwts.ParseToken(token)
+	_, err := jwts.ParseToken(token)
 	if err == nil {
 		http.Error(w, customerrors.ErrAlreadyAuthorized.Error(), http.StatusBadRequest)
 		return

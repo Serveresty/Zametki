@@ -4,14 +4,15 @@ import (
 	"Zametki/configs"
 	"Zametki/models"
 	cerr "Zametki/utils/custom-errors"
+	customerrors "Zametki/utils/custom-errors"
 	"strings"
 
 	"github.com/dgrijalva/jwt-go"
 )
 
-func ParseToken(token string) error {
+func ParseToken(token string) (*models.Claims, error) {
 	if token == "" {
-		return cerr.ErrNoTokenFound
+		return nil, cerr.ErrNoTokenFound
 	}
 
 	tokenString := strings.Split(token, " ")[1]
@@ -21,8 +22,13 @@ func ParseToken(token string) error {
 		return secretKey, nil
 	})
 	if err != nil || !tkn.Valid {
-		return cerr.ErrInvalidToken
+		return nil, cerr.ErrInvalidToken
 	}
 
-	return nil
+	claims, ok := tkn.Claims.(*models.Claims)
+	if !ok {
+		return nil, customerrors.ErrClaims
+	}
+
+	return claims, nil
 }

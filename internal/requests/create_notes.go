@@ -12,19 +12,19 @@ func CreateNotes(w http.ResponseWriter, r *http.Request) {
 	token := r.Header.Get("Authorization")
 	claims, err := jwts.ParseToken(token)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		RespondWithError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 
 	var note models.Note
 	if err := json.NewDecoder(r.Body).Decode(&note); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		RespondWithError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 
 	err = database.CreateNoteDB(&note, claims.Subject)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		RespondWithError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 

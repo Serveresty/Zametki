@@ -13,25 +13,25 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 	token := r.Header.Get("Authorization")
 	_, err := jwts.ParseToken(token)
 	if err == nil {
-		http.Error(w, customerrors.ErrAlreadyAuthorized.Error(), http.StatusBadRequest)
+		RespondWithError(w, http.StatusBadRequest, customerrors.ErrAlreadyAuthorized.Error())
 		return
 	}
 
 	var user models.User
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		RespondWithError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 
 	err = database.IsUserRegistered(user.Email)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		RespondWithError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 
 	err = database.RegistationDB(&user)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		RespondWithError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 

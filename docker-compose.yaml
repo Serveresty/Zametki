@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  app:
+    container_name: notes
+    build: ./
+    env_file:
+      - ./configs/.env
+    depends_on:
+      - db
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}
+    hostname: ${SERVER_HOST}
+    command: ["./build/main"]
+    restart: always
+
+  db:
+    container_name: postgres_main
+    image: postgres
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    ports:
+      - 5436:${DB_PORT}
+    hostname: ${DB_HOST}
+    restart: always

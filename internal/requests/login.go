@@ -37,8 +37,12 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	tokenJSON := map[string]string{
+		"token": token,
+	}
+
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Authorization", token)
-	w.Write([]byte(token))
+	json.NewEncoder(w).Encode(tokenJSON)
 	w.WriteHeader(http.StatusOK)
 }

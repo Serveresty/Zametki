@@ -28,7 +28,7 @@ func main() {
 	router.HandleFunc("/sign-up", requests.Registration).Methods("POST")
 	router.HandleFunc("/sign-in", requests.Login).Methods("POST")
 	router.HandleFunc("/notes", requests.GetNotes).Methods("GET")
-	router.HandleFunc("/create-notes", requests.GetNotes).Methods("POST")
+	router.HandleFunc("/create-notes", requests.CreateNotes).Methods("POST")
 
 	port := configs.GetEnv("SERVER_PORT")
 	if err := http.ListenAndServe(":"+port, router); err != nil {

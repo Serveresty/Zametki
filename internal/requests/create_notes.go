@@ -22,6 +22,15 @@ func CreateNotes(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	errorsSpell, err := spellChecker(note.Content)
+	if err != nil {
+		RespondWithError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	finalNote := formatText(note.Content, errorsSpell)
+	note.Content = finalNote
+
 	err = database.CreateNoteDB(&note, claims.Subject)
 	if err != nil {
 		RespondWithError(w, http.StatusBadRequest, err.Error())
